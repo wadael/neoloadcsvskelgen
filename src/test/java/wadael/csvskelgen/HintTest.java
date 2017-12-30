@@ -1,3 +1,5 @@
+package wadael.csvskelgen;
+
 import org.junit.Assert;
 import org.junit.Test;
 import wadael.csvskelgen.Hint;
