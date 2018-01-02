@@ -16,7 +16,8 @@ after that, copy the generated JAR _original-csvskelgen-0.0.1.jar_ found into th
 into the plugins subfolder of your Neo4j server and restart your server.  
  
 You are almost done. Some editing of *neo4j.conf* is needed.
-At the end of the file, you need to add
+At the end of the file, you need give authorizations to my package. 
+Add those lines at the end of your *neo4j.conf* file 
 
     dbms.security.procedures.unrestricted=wadael.*
     dbms.security.procedures.whitelist=wadael.*
@@ -69,6 +70,11 @@ It tends to :scream: scare students although they just have to pick some fields 
  - [ ] find an idea to automagically set the identifier for each label
 
 
+## Cookbook ##
+See [cookbook.md](./cookbook.md) 
+
 ## Misc ##
 The given pronounciation is a joke.
 Have you bought my book ? Please leave a comment on the website where you bought it.
+
+Is this project useful for you ? Send a message ! 

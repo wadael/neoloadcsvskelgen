@@ -53,9 +53,7 @@ public class LoadCsvSkeletonProcedure {
         if(stringTokenizer.countTokens() ==0) throw new Exception("Tokenizing failed, please check that file content matches parameters and vice versa");
 
         int nbLines = ((int)exampleValuescount)+1;
-        // final String[][] fileContent = new String[nbLines][stringTokenizer.countTokens()] ;
-        final String[][] fileContent = new String[nbLines][100] ;
-
+        final String[][] fileContent = new String[nbLines][stringTokenizer.countTokens()] ;
 
         fr = new FileReader(file);
         br = new BufferedReader(fr);
@@ -71,13 +69,8 @@ public class LoadCsvSkeletonProcedure {
         }
 
         skel.setFileContent( fileContent );
-
-
-
         List<StringResult> resultList = new ArrayList<StringResult>() ;
         resultList.add(new StringResult(skel.toString()));
-
         return resultList.stream();
     }
-
 }

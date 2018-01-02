@@ -3,6 +3,9 @@ package wadael.csvskelgen;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a skeleton of LOAD CSV script
+ */
 public class LoadCSVSkeleton {
     private String fileWithPath;
     private String fieldSeparator;
@@ -34,6 +37,10 @@ public class LoadCSVSkeleton {
         return hints;
     }
 
+    /**
+     *
+     * @param fileContent give a 2D array of Strings. Use as last call on your object
+     */
     public void setFileContent(String[][] fileContent) {
         this.fileContent = fileContent;
     }
@@ -48,50 +55,58 @@ public class LoadCSVSkeleton {
 
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer("USING PERIODIC COMMIT 6000 " + System.lineSeparator());
-        sb.append("LOAD CSV WITH HEADERS FROM '" + fileWithPath
-                + "' AS line FIELDTERMINATOR '" + fieldSeparator + "'" + System.lineSeparator());
 
-        int nodeIndex = 0;
-        int headerIndex = 0;
+        if(fileContent==null || fileContent.length==0) return "..."; // else its often evaluated by IDE in debugging mode
 
-        // if no hints then create an UnLabelled node with all fields.
-        if (getHints() == null || getHints().size() == 0) {
-            try {
-                List<Hint> hint = new ArrayList<>();
-                hint.add(new Hint("UnLabelled", fileContent[0].length));
-                setHints(hint);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        try {
+            StringBuffer sb = new StringBuffer("USING PERIODIC COMMIT 6000 " + System.lineSeparator());
+            sb.append("LOAD CSV WITH HEADERS FROM '" + fileWithPath
+                    + "' AS line FIELDTERMINATOR '" + fieldSeparator + "'" + System.lineSeparator());
 
-        for (Hint h : getHints()) {
-            sb.append("MERGE (node" + nodeIndex);
-            sb.append(":" + h.getLabelName() + "{})" + System.lineSeparator());
+            int nodeIndex = 0;
+            int headerIndex = 0;
 
-            for (int i = 0; i < h.getColumnCount(); i++) {
-                sb.append("SET node" + nodeIndex + "." + StringUtils.clean(fileContent[0][headerIndex]) );
-                sb.append("= line.`" + fileContent[0][headerIndex] + "`");
-
-                if (getExampleValuescount() > 0) {
-                    try {
-                        sb.append("// ");
-                        for (int y = 1; y <= getExampleValuescount(); y++) {
-                            sb.append(fileContent[y][headerIndex]);
-                            sb.append(",");
-                        }
-                    } catch (Exception noWorries) {
-                        // probably getExampleValuescount > count of rows in file.
-                        noWorries.printStackTrace();
-                    }
+            // if no hints then create an UnLabelled node with all fields.
+            if (getHints() == null || getHints().size() == 0) {
+                try {
+                    List<Hint> hint = new ArrayList<>();
+                    hint.add(new Hint("UnLabelled", fileContent[0].length));
+                    setHints(hint);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                sb.append(System.lineSeparator());
-                headerIndex++;
             }
-            nodeIndex++;
-        }
 
-        return sb.toString();
+            for (Hint h : getHints()) {
+                if (h.getLabelName() != null) {
+                    sb.append("MERGE (node" + nodeIndex);
+                    sb.append(":" + h.getLabelName() + "{})" + System.lineSeparator());
+
+                    for (int i = 0; i < h.getColumnCount(); i++) {
+                        sb.append("SET node" + nodeIndex + "." + StringUtils.clean(fileContent[0][headerIndex]));
+                        sb.append("= line.`" + fileContent[0][headerIndex] + "`");
+
+                        if (getExampleValuescount() > 0) {
+                            try {
+                                sb.append("// ");
+                                for (int y = 1; y <= getExampleValuescount(); y++) {
+                                    sb.append(fileContent[y][headerIndex]);
+                                    sb.append(",");
+                                }
+                            } catch (Exception noWorries) {
+                                // probably getExampleValuescount > count of rows in file.
+                                noWorries.printStackTrace();
+                            }
+                        }
+                        sb.append(System.lineSeparator());
+                        headerIndex++;
+                    }
+                    nodeIndex++;
+                }
+            }
+            return sb.toString();
+        }catch(ArrayIndexOutOfBoundsException aioobe){
+            throw new ArrayIndexOutOfBoundsException("Check the number of columns in the hints and in the file. There is a mismatch :/");
+        }
     }
 }

@@ -25,7 +25,6 @@ import static org.junit.Assert.assertFalse;
 public class LoadCsvSkeletonProcedureTest {
 
     // this code owes a lot to APOC
-
     private static GraphDatabaseService db;
 
     @BeforeClass
@@ -46,7 +45,6 @@ public class LoadCsvSkeletonProcedureTest {
 
     @Test
     public void testCallAnythingFile() {
-        //ignoreException(() -> {
             testCall(db,
                     "CALL wadael.csvskelgen('/home/jerome/OpenSource/neoloadcsvskelgen/src/test/resources/anything.csv',';',0,'Twitto:4')",
                     null,
@@ -54,7 +52,6 @@ public class LoadCsvSkeletonProcedureTest {
                         String doc = (String) r.get("value");
                         System.out.println("doc = " + doc);
                     });
-        //}, Exception.class);
     }
 
 
