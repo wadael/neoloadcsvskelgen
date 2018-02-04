@@ -12,6 +12,18 @@ Create a hint with the wanted column count, but with a null label name
      hints.add( new Hint("Country",2) );
      hints.add( new Hint("Planet",2) );
      skel.setHints( hints );
+
+## The dreaded SIREN file !
+
+The list of all French companies is published as open data.
+It has 130+ columns. It is what made me create this tool.
+The command I propose is 
+   
+   CALL wadael.csvskelgen("/home/jerome/Tools/neo/neo4j-community-3.3.1/import/siren78.csv",";",4,"Etablissement:16,Localisation:6,Region:2,Etablissement:16,NatureEI:2,Activite:3,Effectif:4,Etablissement:11,Entreprise:2,Responsable:4,Entreprise:4,NatureJuridique:2,Etablissement:10,Categorie:1,Etablissement:12")
+   
+Then, you should tweak the output to group all the SET commands per label.
+As each group of column is treated as if if was a new label, some search/replace is needed.  
+     
      
  ## Troubleshooting
  This procedure is intended for use by developers. 

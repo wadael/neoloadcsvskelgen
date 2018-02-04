@@ -59,7 +59,7 @@ public class LoadCSVSkeleton {
         if(fileContent==null || fileContent.length==0) return "..."; // else its often evaluated by IDE in debugging mode
 
         try {
-            StringBuffer sb = new StringBuffer("USING PERIODIC COMMIT 6000 " + System.lineSeparator());
+            StringBuilder sb = new StringBuilder("DO NOT FORGET TO CREATE THE CONSTRAINTS FIRST!!!!! \n" + System.lineSeparator() +"USING PERIODIC COMMIT 6000 " + System.lineSeparator());
             sb.append("LOAD CSV WITH HEADERS FROM '" + fileWithPath
                     + "' AS line FIELDTERMINATOR '" + fieldSeparator + "'" + System.lineSeparator());
 
@@ -106,7 +106,7 @@ public class LoadCSVSkeleton {
             }
             return sb.toString();
         }catch(ArrayIndexOutOfBoundsException aioobe){
-            throw new ArrayIndexOutOfBoundsException("Check the number of columns in the hints and in the file. There is a mismatch :/");
+            throw new ArrayIndexOutOfBoundsException("Check the number of columns in the hints and in the file. There is a mismatch :/"  + aioobe.getMessage());
         }
     }
 }

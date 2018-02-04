@@ -13,7 +13,8 @@ public class StringUtils {
         if(input != null && input.trim().length() >0){
             output=output.trim();
             output=output.replace(" ", "");
+            output=output.replace("\"", "");
         }
-        return output;
+        return output.toLowerCase();
     }
 }
